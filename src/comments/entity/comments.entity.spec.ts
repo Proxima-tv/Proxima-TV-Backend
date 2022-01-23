@@ -1,7 +1,7 @@
-import { CommentsEntity } from './comments.entity';
+import { Comment } from './comments.entity';
 
 describe('CommentsEntity', () => {
   it('should be defined', () => {
-    expect(new CommentsEntity()).toBeDefined();
+    expect(new Comment()).toBeDefined();
   });
 });
