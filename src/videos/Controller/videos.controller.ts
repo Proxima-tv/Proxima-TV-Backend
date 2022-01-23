@@ -1,8 +1,8 @@
 import { Controller, Get, Request, Post, Query, UploadedFile, UseInterceptors, Delete } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { VideosService } from '../Service/videos.service';
-import { Video } from '../Entity/video.entity';
-import { CryptoService } from 'src/crypto/crypto.service';
+import { CryptoService } from '../../crypto/Service/crypto.service';
+
 
 @Controller('videos')
 export class VideosController {
