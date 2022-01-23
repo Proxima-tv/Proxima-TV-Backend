@@ -5,18 +5,18 @@ export class Video {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column('number')
+    @Column()
     file:string;
 
-    @Column('name')
+    @Column()
     name:string;
 
-    @Column('likes')
+    @Column()
     linkes:number;
 
-    @Column('dislikes')
+    @Column()
     dislikes: number;
 
-    @Column('vip')
+    @Column()
     vip:boolean;
 }

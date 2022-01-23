@@ -6,6 +6,8 @@ import { AppService } from './app.service';
 import { VideosController } from './videos/Controller/videos.controller';
 import { CryptoService } from './crypto/crypto.service';
 import { VideosService } from './videos/Service/videos.service';
+import { Video } from './videos/Entity/video.entity';
+import { VideosModule } from './videos/module/videos.module';
 
 @Module({
   imports: [
@@ -16,9 +18,10 @@ import { VideosService } from './videos/Service/videos.service';
       username: 'root',
       password: '22999',
       database: 'proxima',
-      entities: [],
+      entities: [Video],
       synchronize: true,
     }),
+    VideosModule,
   ],
   controllers: [AppController, VideosController],
   providers: [AppService, CryptoService, VideosService],

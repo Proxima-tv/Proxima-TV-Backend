@@ -2,10 +2,12 @@ import { Controller, Get, Request, Post, Query, UploadedFile, UseInterceptors, D
 import { FileInterceptor } from '@nestjs/platform-express';
 import { VideosService } from '../Service/videos.service';
 import { Video } from '../Entity/video.entity';
+import { CryptoService } from 'src/crypto/crypto.service';
 
 @Controller('videos')
 export class VideosController {
-    constructor(private service: VideosService) {}
+    constructor(
+        private service: VideosService) {}
     @Get('videos')
     async getVideos(@Query() query, @Request() req) {
         // TODO Pull data from database
@@ -19,9 +21,12 @@ export class VideosController {
         // Assuming verification succeeded
         // Catch video data from request
         //      - requires constructed videos request string
-        // this.service.getVideos(req.payload.video);
+        let order = {};
+        order[query.sort]=query.order;
+        //console.log(this.service.getVideosByRequest(query.type, query.limit, order));
 
-        return {type: "reply", payload: "placeholder"}; // returning = replying
+        console.log(CryptoService.decrypt(CryptoService.encrypt('{type: "reply", payload: "placeholder"}')))
+        return CryptoService.encrypt('{type: "reply", payload: "placeholder"}'); // returning = replying
     }
 
     @Get('video')

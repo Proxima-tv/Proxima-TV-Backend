@@ -27,12 +27,11 @@ export class CryptoService {
     /**
      * decrypts data send from client
      * @param data the data received
-     * @note the return of this may break due to yet uknown values might change later on to string
-     * @returns object decrypted from data by client
+     * @returns string decrypted from data by client
      */
-    static decrypt(data: object): object {
+    static decrypt(data: object): string {
         const decipher = crypto.createDecipheriv(this.algorithm, this.secretKey, Buffer.from(data['iv'], 'hex'));
         const decrpyted = Buffer.concat([decipher.update(Buffer.from(data['content'], 'hex')), decipher.final()]);
-        return decrpyted;
+        return decrpyted.toString();
     }
 }

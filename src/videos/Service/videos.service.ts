@@ -1,11 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Connection, Repository } from 'typeorm';
 import { Video } from '../Entity/video.entity';
 
 @Injectable()
 export class VideosService {
-    constructor(@InjectRepository(Video) private videoRepository: Repository<Video>){}
+    constructor(@InjectRepository(Video) 
+        private videoRepository: Repository<Video>, 
+        private connection: Connection){}
 
     /**
      * gets videos with the requested parameters
@@ -65,7 +67,7 @@ export class VideosService {
      * deletes a specified video
      * @param video the video to remove
      */
-    async deleteVideo(video: Video) {
-        this.videoRepository.delete(video);
+    async deleteVideo(_id: number) {
+        this.videoRepository.delete(_id);
     }
 }
