@@ -13,6 +13,11 @@ export class UserController {
     @Post('login')
     async loginUser(@Body() body, @Request() req){
         console.log(body);
+        // get password hash from request body
+        // get password hash from database
+        // decrypt password
+        // compare both
+        // return user data and success code when logged in and error when not
     }
 
     @Post('update')
