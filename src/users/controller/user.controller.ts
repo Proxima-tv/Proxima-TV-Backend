@@ -1,4 +1,5 @@
 import { Body, Controller, Get, Post, Request } from '@nestjs/common';
+import { CryptoService } from 'src/crypto/Service/crypto.service';
 import { User } from '../entity/user.entity';
 import { UserService } from '../service/user.service';
 
@@ -10,14 +11,15 @@ export class UserController {
         this.service.createUser(user);
     }
 
-    @Post('login')
+    @Get('login')
     async loginUser(@Body() body, @Request() req){
-        console.log(body);
+        console.log(JSON.parse(CryptoService.decrypt(body)));
         // get password hash from request body
         // get password hash from database
         // decrypt password
         // compare both
         // return user data and success code when logged in and error when not
+        return {success:true, code:200};
     }
 
     @Post('update')
