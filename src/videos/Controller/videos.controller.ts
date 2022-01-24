@@ -1,7 +1,8 @@
-import { Controller, Get, Request, Post, Query, UploadedFile, UseInterceptors, Delete } from '@nestjs/common';
+import { Controller, Get, Request, Post, Query, UploadedFile, UseInterceptors, Delete, Body } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { VideosService } from '../Service/videos.service';
 import { CryptoService } from '../../crypto/Service/crypto.service';
+import { Video } from '../Entity/video.entity';
 
 
 @Controller('videos')
@@ -49,17 +50,20 @@ export class VideosController {
      * @returns reply object
      */
     @Post('video')
-    @UseInterceptors(FileInterceptor('file'))
-    async postVideos(@UploadedFile() file: Express.Multer.File, @Query() query, @Request() req) {
+    @UseInterceptors(FileInterceptor('file', {dest: '../vids/'}))
+    async postVideos(@UploadedFile() file: Express.Multer.File, @Query() query, @Request() req, @Body() video:Video) {
 
         // TODO: get file from request and insert it after type checking into storage
         console.log(file);
+        console.log(video);
 
         // TODO: Verify data against proper permissions
         //      - Uses headers
         //      - checks params
         console.log(query);
         console.log(req.headers);
+
+        this.service.createVideo(video);
 
         // Replyies to the requester that the request was successfull
         return {type: "reply", code: "succes"};

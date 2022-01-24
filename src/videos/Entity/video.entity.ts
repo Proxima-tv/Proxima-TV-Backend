@@ -2,8 +2,9 @@ import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Video {
+    
     @PrimaryGeneratedColumn()
-    id: number;
+    vid_id: number;
 
     @Column()
     file:string;
@@ -12,7 +13,7 @@ export class Video {
     name:string;
 
     @Column()
-    linkes:number;
+    likes:number;
 
     @Column()
     dislikes: number;

@@ -27,7 +27,7 @@ export class VideosService {
      */
     async getVideosByRequest(_type: String, _limit: number, _order: object): Promise<Video[]> {
         return await this.videoRepository.find({
-            select: ["id", "name", "file", "vip"],
+            select: ["vid_id", "name", "file", "vip"],
             where: [{ "type": _type }],
             order: _order,
             take: _limit
@@ -41,8 +41,8 @@ export class VideosService {
      */
     async getVideo(_id: number):Promise<Video[]> {
         return await this.videoRepository.find({
-            select: ["id", "name", "file", "vip"],
-            where: [{ "id": _id }]
+            select: ["vid_id", "name", "file", "vip"],
+            where: [{ "vid_id": _id }]
         });
     }
 

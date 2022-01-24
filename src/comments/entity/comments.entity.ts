@@ -11,6 +11,12 @@ export class Comment {
     @Column()
     comment: string;
 
+    @Column({default: 0})
+    likes: number;
+
+    @Column({default:0})
+    dislkies:number;
+
     @Column()
-    video: number;
+    vid_id: number;
 }
