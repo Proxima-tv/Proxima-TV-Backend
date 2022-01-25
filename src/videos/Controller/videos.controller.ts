@@ -34,6 +34,11 @@ export class VideosController {
         //CryptoService.encrypt(JSON.stringify({type: "reply", videos: await this.service.getVideos()})); // returning = replying
     }
 
+    @Get('search')
+    async searchInDB(@Body() body){
+        return this.service.searchVideo(body.query);
+    }
+
     @Get('video')
     async getVideo(@Body() body, @Response({passthrough:true}) res, @Request() req) {
         // TODO Pull data from database

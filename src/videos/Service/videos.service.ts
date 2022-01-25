@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Connection, Repository } from 'typeorm';
+import { Connection, Like, Repository } from 'typeorm';
 import { Video } from '../Entity/video.entity';
 
 @Injectable()
@@ -54,6 +54,13 @@ export class VideosService {
      */
     async createVideo(video: Video) {
         this.videoRepository.save(video);
+    }
+
+    async searchVideo(_query:string):Promise<Object>{
+        return await this.videoRepository.find({
+            select: ["vid_id", "name", "file", "vip"],
+            where: [{ "name": Like("%"+_query+"%")}]
+        });
     }
 
     /**
