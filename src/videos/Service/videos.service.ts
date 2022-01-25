@@ -15,7 +15,9 @@ export class VideosService {
      * @returns ??? a list of videos (return type need to be logged)
      */
     async getVideos(): Promise<Video[]> {
-        return await this.videoRepository.find();
+        return await this.videoRepository.find({
+            select: ["vid_id", "name", "vip", "likes", "dislikes"],
+        });
     }
 
     /**
@@ -27,7 +29,7 @@ export class VideosService {
      */
     async getVideosByRequest(_type: String, _limit: number, _order: object): Promise<Video[]> {
         return await this.videoRepository.find({
-            select: ["vid_id", "name", "file", "vip"],
+            select: ["vid_id", "name", "vip", "likes", "dislikes"],
             where: [{ "type": _type }],
             order: _order,
             take: _limit

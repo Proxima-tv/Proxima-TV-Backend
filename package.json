@@ -25,6 +25,7 @@
     "@nestjs/core": "^8.0.0",
     "@nestjs/platform-express": "^8.0.0",
     "@nestjs/typeorm": "^8.0.3",
+    "@valueadd/nestjs-streaming": "^0.2.0",
     "crypto": "^1.0.1",
     "mysql2": "^2.3.3",
     "reflect-metadata": "^0.1.13",

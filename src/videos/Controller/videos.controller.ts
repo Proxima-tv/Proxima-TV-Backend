@@ -30,20 +30,23 @@ export class VideosController {
         //console.log(this.service.getVideosByRequest(query.type, query.limit, order));
 
         console.log(CryptoService.decrypt(CryptoService.encrypt('{type: "reply", payload: "placeholder"}')))
-        return CryptoService.encrypt('{type: "reply", payload: "placeholder"}'); // returning = replying
+        return {type: "reply", videos: await this.service.getVideos()}
+        //CryptoService.encrypt(JSON.stringify({type: "reply", videos: await this.service.getVideos()})); // returning = replying
     }
 
     @Get('video')
-    getVideo(@Body() body, @Response({passthrough:true}) res, @Request() req): StreamableFile {
+    async getVideo(@Body() body, @Response({passthrough:true}) res, @Request() req) {
         // TODO Pull data from database
 
         // TODO: Verify data against proper permissions
         //      - Uses headers
         //      - checks params
-        console.log(req.headers);
-        
-        const file = createReadStream('./uploads/' + body.video);
-        return new StreamableFile(file) // returning = replying
+
+        console.log(req.hostname);
+        let fetched = await this.service.getVideo(body.video);
+        console.log(fetched[0]['file'])
+        //return video;
+        return {file:"http://localhost:3000/public/" + fetched[0]['file'], name: fetched[0]['name'], likes: fetched[0]['likes'], dislikes: fetched[0]['dislikes'], id: fetched[0]['vid_id']};
     }
 
     /**
@@ -68,8 +71,8 @@ export class VideosController {
         //      - Uses headers
         //      - checks params
         //console.log(req.headers);
-
-        //this.service.createVideo(video);
+        video.file = file.originalname; // fixes undefined file issue
+        this.service.createVideo(video);
 
         // Replyies to the requester that the request was successfull
         // return {type: "reply", code: "succes"};
