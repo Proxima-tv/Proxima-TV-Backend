@@ -12,9 +12,9 @@ import { CommentsService } from './comments/service/comments.service';
 import { CommentsModule } from './comments/module/comments.module';
 import { CommentsController } from './comments/controller/comments.controller';
 import { Comment } from './comments/Entity/comments.entity';
-import { User.ModuleModule } from './users/module/user.module/user.module.module';
-import { User.ServiceService } from './users/service/user.service/user.service.service';
-import { UserController } from './users/controller/user/user.controller';
+import { UserModule } from './users/module/user.module';
+import { UserService } from './users/service/user.service';
+import { UserController } from './users/controller/user.controller';
 
 
 @Module({
@@ -31,9 +31,9 @@ import { UserController } from './users/controller/user/user.controller';
     }),
     VideosModule,
     CommentsModule,
-    User.ModuleModule,
+    UserModule,
   ],
   controllers: [AppController, VideosController, CommentsController, UserController],
-  providers: [AppService, CryptoService, VideosService, CommentsService, User.ServiceService],
+  providers: [AppService, CryptoService, VideosService, CommentsService, UserService],
 })
 export class AppModule {}
