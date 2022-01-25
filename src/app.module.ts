@@ -12,10 +12,10 @@ import { CommentsService } from './comments/service/comments.service';
 import { CommentsModule } from './comments/module/comments.module';
 import { CommentsController } from './comments/controller/comments.controller';
 import { Comment } from './comments/Entity/comments.entity';
+import { UserController } from './users/controller/user.controller';
 import { UserModule } from './users/module/user.module';
 import { UserService } from './users/service/user.service';
-import { UserController } from './users/controller/user.controller';
-
+import { User } from './users/entity/user.entity';
 
 @Module({
   imports: [
@@ -26,7 +26,7 @@ import { UserController } from './users/controller/user.controller';
       username: 'root',
       password: '22999',
       database: 'proxima',
-      entities: [Video,Comment],
+      entities: [Video,Comment,User],
       synchronize: true,
     }),
     VideosModule,

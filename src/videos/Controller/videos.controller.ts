@@ -1,8 +1,11 @@
-import { Controller, Get, Request, Post, Query, UploadedFile, UseInterceptors, Delete, Body } from '@nestjs/common';
+import { Controller, Get, Request, Post, Query, UploadedFile, UseInterceptors, Delete, Body, StreamableFile, Response } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { VideosService } from '../Service/videos.service';
 import { CryptoService } from '../../crypto/Service/crypto.service';
 import { Video } from '../Entity/video.entity';
+import { createReadStream, fstat } from 'node:fs';
+import path, { join } from 'path';
+import * as fs from 'node:fs';
 
 
 @Controller('videos')
@@ -31,16 +34,16 @@ export class VideosController {
     }
 
     @Get('video')
-    async getVideo(@Query() query, @Request() req) {
+    getVideo(@Body() body, @Response({passthrough:true}) res, @Request() req): StreamableFile {
         // TODO Pull data from database
 
         // TODO: Verify data against proper permissions
         //      - Uses headers
         //      - checks params
-        console.log(query);
         console.log(req.headers);
         
-        return {type: "reply", payload: "placeholder"}; // returning = replying
+        const file = createReadStream('./uploads/' + body.video);
+        return new StreamableFile(file) // returning = replying
     }
 
     /**
@@ -49,24 +52,27 @@ export class VideosController {
      * @param query query gotten from request
      * @returns reply object
      */
-    @Post('video')
-    @UseInterceptors(FileInterceptor('file', {dest: '../vids/'}))
-    async postVideos(@UploadedFile() file: Express.Multer.File, @Query() query, @Request() req, @Body() video:Video) {
+    @UseInterceptors(FileInterceptor('file', {
+        dest: "./uploads"
+    }))
+    @Post('upload')
+    async postVideos(@UploadedFile() file: Express.Multer.File, @Request() req, @Body() video) {
 
         // TODO: get file from request and insert it after type checking into storage
-        console.log(file);
         console.log(video);
+        console.log(file);
+
+        fs.rename(file.path, './uploads/'+ file.originalname, (err) => {if (err) throw err;});
 
         // TODO: Verify data against proper permissions
         //      - Uses headers
         //      - checks params
-        console.log(query);
-        console.log(req.headers);
+        //console.log(req.headers);
 
-        this.service.createVideo(video);
+        //this.service.createVideo(video);
 
         // Replyies to the requester that the request was successfull
-        return {type: "reply", code: "succes"};
+        // return {type: "reply", code: "succes"};
     }
 
     /**

@@ -18,6 +18,6 @@ export class Video {
     @Column()
     dislikes: number;
 
-    @Column()
+    @Column({default:false})
     vip:boolean;
 }

@@ -12,14 +12,38 @@ export class UserService {
         await this.userRepository.save(user);
     }
 
-    async getUser(_id:number){
-        this.userRepository.find({
-            select:[],
-            where:[{"id":_id}]
-        })
+    getUser(_email:string):object{
+        return this.userRepository.find({
+            select:["email","name","profile_likes","profile_pic","username"],
+            where:[{"email":_email}]
+        });
     }
 
-    async verifyPassword(){
-        
+    getUserbyName(_username:string):Object{
+        return this.userRepository.find({
+            select:["email","name","profile_likes","profile_pic","username"],
+            where:[{"username":_username}]
+        }); 
+    }
+
+    async updateUser(user:User){
+        this.userRepository.save(user);
+    }
+
+    async deleteUser(user:User){
+        this.userRepository.delete(user);
+    }
+
+    async verifyPassword(_email:string, _password):Promise<boolean> {
+        console.log(_email);
+        console.log(_password);
+        const password = await this.userRepository.find({
+            select:["password"],
+            where:[{"email":_email}]
+        });
+
+        console.log(password[0]['password']);
+
+        return password[0]['password'] == _password;
     }
 }

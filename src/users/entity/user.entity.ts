@@ -1,7 +1,10 @@
-import { Column, Entity, PrimaryColumn } from "typeorm";
+import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class User {
+    @PrimaryGeneratedColumn()
+    id:number;
+    
     @Column()
     username: string;
     
@@ -18,7 +21,7 @@ export class User {
     profile_likes: number;
 
     @Column()
-    profile_pic: Blob;
+    profile_pic: string;
     
     @Column()
     profile_id: number;
