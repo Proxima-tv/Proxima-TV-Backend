@@ -1,9 +1,9 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
-export class Comment {
+export class Comments {
     @PrimaryGeneratedColumn()
-    id: number;
+    com_id: number;
 
     @Column()
     author: number;
@@ -12,11 +12,14 @@ export class Comment {
     comment: string;
 
     @Column({default: 0})
-    likes: number;
+    video: string;
 
     @Column({default:0})
-    dislkies:number;
+    profile_id:number;
 
     @Column()
     vid_id: number;
+
+    @Column()
+    commented_on: string;
 }

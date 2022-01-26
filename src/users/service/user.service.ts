@@ -14,14 +14,14 @@ export class UserService {
 
     getUser(_email:string):object{
         return this.userRepository.find({
-            select:["email","name","profile_likes","profile_pic","username"],
+            select:["id", "email","name","profile_likes","profile_pic","username"],
             where:[{"email":_email}]
         });
     }
 
     getUserbyName(_username:string):Object{
         return this.userRepository.find({
-            select:["email","name","profile_likes","profile_pic","username"],
+            select:["id", "email","name","profile_likes","profile_pic","username"],
             where:[{"username":_username}]
         }); 
     }

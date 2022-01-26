@@ -1,11 +1,15 @@
 import { Body, Controller, Get, Post, Request } from '@nestjs/common';
 import { CryptoService } from 'src/crypto/Service/crypto.service';
+import { WatchhistoryService } from 'src/watchhistory/service/watchhistory.service';
 import { User } from '../entity/user.entity';
 import { UserService } from '../service/user.service';
 
 @Controller('user')
 export class UserController {
-    constructor(private service:UserService){}
+    constructor(
+        private service:UserService,
+        private watch:WatchhistoryService    
+    ){}
     @Post('register')
     async registerUser(@Body() user){
 
@@ -30,8 +34,13 @@ export class UserController {
         // get password hash from database
         // return user data and success code when logged in and error when not
 
+        
+
         const user = JSON.parse(CryptoService.decrypt(body));
         if(await this.service.verifyPassword(user.email, user.password)) {
+            let u = await this.service.getUser(user.email);
+            console.log(u[0]['id']);
+            this.watch.getHistory(u[0]['id']);
             return CryptoService.encrypt(JSON.stringify({success:true, code:200}));
         } else {
             return CryptoService.encrypt(JSON.stringify({success:false, code:"invalid_login"}));

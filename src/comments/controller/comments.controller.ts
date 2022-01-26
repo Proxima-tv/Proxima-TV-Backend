@@ -1,5 +1,5 @@
 import { Controller, Get, Request, Post, Query, Body } from '@nestjs/common';
-import { Comment } from '../Entity/comments.entity';
+import { Comments } from '../Entity/comments.entity';
 import { CommentsService } from '../service/comments.service';
 
 @Controller('comments')
@@ -7,8 +7,12 @@ export class CommentsController {
     constructor(private service:CommentsService){}
     
     @Post('comment')
-    async createComment(@Body() comment:Comment, @Request() req){
+    async createComment(@Body() comment:Comments, @Request() req){
+        console.log(comment);
+        let date = new Date();
+        comment["commented_on"] = "" + date.getDate(); 
         this.service.createComment(comment);
+        return "worked";
     }
 
     @Get('comments')

@@ -1,20 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Connection, Repository } from 'typeorm';
-import { Comment } from '../Entity/comments.entity';
+import { Comments } from '../Entity/comments.entity';
 
 @Injectable()
 export class CommentsService {
-    constructor(@InjectRepository(Comment)
-    private commentRepository:Repository<Comment>,
+    constructor(@InjectRepository(Comments)
+    private commentRepository:Repository<Comments>,
     private connection: Connection){}
 
     /**
      * creates comment from given data
-     * @param comment received data from comment
+     * @param comments received data from comment
      */
-    async createComment(comment:Comment){
-        this.commentRepository.save(comment);
+    async createComment(comments:Comments){
+        this.commentRepository.save(comments);
     }
 
     /**
@@ -22,7 +22,7 @@ export class CommentsService {
      * @param _video the video to receive
      * @returns 
      */
-    async getComments(_video:number):Promise<Comment[]>{
+    async getComments(_video:number):Promise<Comments[]>{
         // TODO get data from datbase
         // CURRENT ONGOIN ISSUE: NOT ALL DATA PRESENT
         return await this.commentRepository.find({
@@ -47,17 +47,17 @@ export class CommentsService {
 
     /**
      * updates given comment
-     * @param comment the received comment to change
+     * @param comments the received comment to change
      */
-    async updateComment(comment:Comment){
-        this.commentRepository.save(comment);
+    async updateComment(comments:Comments){
+        this.commentRepository.save(comments);
     }
 
     /**
      * deletes a comment
-     * @param comment comment to delete
+     * @param comments comment to delete
      */
-    async deleteComment(comment: Comment){
-        await this.commentRepository.delete(comment)
+    async deleteComment(comments:Comments){
+        await this.commentRepository.delete(comments)
     }
 }
