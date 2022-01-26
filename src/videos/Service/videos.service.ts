@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Connection, Repository } from 'typeorm';
+import { Connection, Like, Repository } from 'typeorm';
 import { Video } from '../Entity/video.entity';
 
 @Injectable()
@@ -15,7 +15,9 @@ export class VideosService {
      * @returns ??? a list of videos (return type need to be logged)
      */
     async getVideos(): Promise<Video[]> {
-        return await this.videoRepository.find();
+        return await this.videoRepository.find({
+            select: ["vid_id", "name", "vip", "likes", "dislikes"],
+        });
     }
 
     /**
@@ -27,7 +29,7 @@ export class VideosService {
      */
     async getVideosByRequest(_type: String, _limit: number, _order: object): Promise<Video[]> {
         return await this.videoRepository.find({
-            select: ["vid_id", "name", "file", "vip"],
+            select: ["vid_id", "name", "vip", "likes", "dislikes"],
             where: [{ "type": _type }],
             order: _order,
             take: _limit
@@ -52,6 +54,13 @@ export class VideosService {
      */
     async createVideo(video: Video) {
         this.videoRepository.save(video);
+    }
+
+    async searchVideo(_query:string):Promise<Object>{
+        return await this.videoRepository.find({
+            select: ["vid_id", "name", "file", "vip"],
+            where: [{ "name": Like("%"+_query+"%")}]
+        });
     }
 
     /**
