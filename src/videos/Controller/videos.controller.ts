@@ -29,7 +29,6 @@ export class VideosController {
         order[query.sort]=query.order;
         //console.log(this.service.getVideosByRequest(query.type, query.limit, order));
 
-        console.log(CryptoService.decrypt(CryptoService.encrypt('{type: "reply", payload: "placeholder"}')))
         return {type: "reply", videos: await this.service.getVideos()}
         //CryptoService.encrypt(JSON.stringify({type: "reply", videos: await this.service.getVideos()})); // returning = replying
     }

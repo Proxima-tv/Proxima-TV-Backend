@@ -30,23 +30,21 @@ export class UserController {
     }
 
     @Get('login')
-    async loginUser(@Body() body, @Request() req){
-        console.log(body);
-        console.log(JSON.parse(CryptoService.decrypt(body)));
+    async loginUser(@Request() req){
+        
         // get password hash from request body
         // get password hash from database
         // return user data and success code when logged in and error when not
-
-        
-
-        const user = JSON.parse(CryptoService.decrypt(body));
+        console.log(req.query);
+        const user = JSON.parse(req.query['user']);
+        console.log(user);
         if(await this.service.verifyPassword(user.email, user.password)) {
             let u = await this.service.getUser(user.email);
             console.log(u[0]['id']);
             this.watch.getHistory(u[0]['id']);
-            return CryptoService.encrypt(JSON.stringify({success:true, code:200}));
+            return JSON.stringify({success:true, code:200});
         } else {
-            return CryptoService.encrypt(JSON.stringify({success:false, code:"invalid_login"}));
+            return JSON.stringify({success:false, code:"invalid_login"});
         }
     }
 
