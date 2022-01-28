@@ -13,7 +13,8 @@ async function bootstrap() {
     // httpsOptions: {
     //    key: keyFile,
     //    cert: certFile,
-    // }
+    // },
+    cors: true
   });
   app.useStaticAssets(join(__dirname, '..', 'uploads'), {
     prefix: '/public/'

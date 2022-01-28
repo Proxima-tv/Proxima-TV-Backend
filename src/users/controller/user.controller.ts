@@ -19,10 +19,13 @@ export class UserController {
         console.log(await uNameRes.valueOf.length);
 
         if(uNameRes.valueOf.length == 0 || emailRes.valueOf.length == 0 ) {
+            user['profile_likes'] = 0;
+            user['profile_pic'] = 'undefined';
+            user['profile_id'] = Math.floor(Math.random() * 999999999);
             this.service.createUser(user);
-            return CryptoService.encrypt(JSON.stringify({success:true, code:200}));
+            return {success:true, code:200};
         } else {
-            return CryptoService.encrypt(JSON.stringify({success:false, code:"duplicating_user_or_email"}));
+            return {success:false, code:"duplicating_user_or_email"};
         }
     }
 
