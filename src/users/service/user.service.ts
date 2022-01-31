@@ -35,14 +35,14 @@ export class UserService {
     }
 
     async verifyPassword(_email:string, _password):Promise<boolean> {
-        console.log(_email);
+        console.log("email: " + _email);
         console.log(_password);
         const password = await this.userRepository.find({
             select:["password"],
             where:[{"email":_email}]
         });
 
-        console.log(password[0]['password']);
+        console.log(password[0]['password'] == _password);
 
         return password[0]['password'] == _password;
     }

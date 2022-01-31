@@ -27,15 +27,15 @@ export class UserController {
     }
 
     @Get('login')
-    async loginUser(@Body() body, @Request() req){
-        console.log(body);
+    async loginUser(@Request() req){
+        console.log(req.query);
         // get password hash from request body
         // get password hash from database
         // return user data and success code when logged in and error when not
 
         
 
-        const user = JSON.parse(body);
+        const user = req.query;
         if(await this.service.verifyPassword(user.email, user.password)) {
             let u = await this.service.getUser(user.email);
             console.log(u[0]['id']);
