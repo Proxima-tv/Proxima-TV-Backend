@@ -20,30 +20,33 @@ export class UserController {
 
         if(uNameRes.valueOf.length == 0 || emailRes.valueOf.length == 0 ) {
             this.service.createUser(user);
-            return CryptoService.encrypt(JSON.stringify({success:true, code:200}));
+            return {success:true, code:200};
         } else {
-            return CryptoService.encrypt(JSON.stringify({success:false, code:"duplicating_user_or_email"}));
+            return {success:false, code:"duplicating_user_or_email"};
         }
     }
 
     @Get('login')
     async loginUser(@Body() body, @Request() req){
         console.log(body);
-        console.log(JSON.parse(CryptoService.decrypt(body)));
         // get password hash from request body
         // get password hash from database
         // return user data and success code when logged in and error when not
 
         
 
-        const user = JSON.parse(CryptoService.decrypt(body));
+        const user = JSON.parse(body);
         if(await this.service.verifyPassword(user.email, user.password)) {
             let u = await this.service.getUser(user.email);
             console.log(u[0]['id']);
-            this.watch.getHistory(u[0]['id']);
-            return CryptoService.encrypt(JSON.stringify({success:true, code:200}));
+            //this.watch.getHistory(u[0]['id']);
+            return {success:true, payload: {
+                username: u[0]['username'],
+                email: u[0]['email'],
+                id: u[0]['id']
+            }};
         } else {
-            return CryptoService.encrypt(JSON.stringify({success:false, code:"invalid_login"}));
+            return {success:false, code:"invalid_login"};
         }
     }
 
