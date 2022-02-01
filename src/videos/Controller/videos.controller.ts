@@ -46,8 +46,8 @@ export class VideosController {
         //      - Uses headers
         //      - checks params
 
-        console.log(req.hostname);
-        let fetched = await this.service.getVideo(body.video);
+        console.log(req.query);
+        let fetched = await this.service.getVideo(JSON.parse(req.query['vidQuery'])['video']);
         console.log(fetched[0]['file'])
         //return video;
         return {file:"http://localhost:3000/public/" + fetched[0]['file'], name: fetched[0]['name'], likes: fetched[0]['likes'], dislikes: fetched[0]['dislikes'], id: fetched[0]['vid_id']};

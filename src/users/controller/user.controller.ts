@@ -35,7 +35,7 @@ export class UserController {
 
         
 
-        const user = req.query;
+        const user = JSON.parse(req.query['user']);
         if(await this.service.verifyPassword(user.email, user.password)) {
             let u = await this.service.getUser(user.email);
             console.log(u[0]['id']);
