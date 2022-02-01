@@ -6,6 +6,7 @@ import { Video } from '../Entity/video.entity';
 import { createReadStream, fstat } from 'node:fs';
 import path, { join } from 'path';
 import * as fs from 'node:fs';
+import { request } from 'node:http';
 
 
 @Controller('videos')
@@ -39,15 +40,17 @@ export class VideosController {
     }
 
     @Get('video')
-    async getVideo(@Body() body, @Response({passthrough:true}) res, @Request() req) {
+    async getVideo(@Response({passthrough:true}) res, @Request() req) {
         // TODO Pull data from database
 
         // TODO: Verify data against proper permissions
         //      - Uses headers
         //      - checks params
 
+        const video = JSON.parse(req.query['video']);
+
         console.log(req.hostname);
-        let fetched = await this.service.getVideo(body.video);
+        let fetched = await this.service.getVideo(video.video);
         console.log(fetched[0]['file'])
         //return video;
         return {file:"http://localhost:3000/public/" + fetched[0]['file'], name: fetched[0]['name'], likes: fetched[0]['likes'], dislikes: fetched[0]['dislikes'], id: fetched[0]['vid_id']};
