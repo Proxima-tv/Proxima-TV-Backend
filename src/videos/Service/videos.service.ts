@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Connection, Like, Repository } from 'typeorm';
-import { Video } from '../Entity/video.entity';
+import { Videos } from '../entity/videos.entity';
 
 @Injectable()
 export class VideosService {
-    constructor(@InjectRepository(Video) 
-        private videoRepository: Repository<Video>, 
+    constructor(@InjectRepository(Videos) 
+        private videoRepository: Repository<Videos>, 
         private connection: Connection){}
 
     /**
@@ -14,9 +14,9 @@ export class VideosService {
      * @param video the requested video
      * @returns ??? a list of videos (return type need to be logged)
      */
-    async getVideos(): Promise<Video[]> {
+    async getVideos(): Promise<Videos[]> {
         return await this.videoRepository.find({
-            select: ["vid_id", "name", "vip", "likes", "dislikes"],
+            select: ["vid_id","likes","dislikes","file","title","premium"],
         });
     }
 
@@ -27,9 +27,9 @@ export class VideosService {
      * @param _limit how many videos should be returned
      * @returns ??? a list of videos (return type need to be logged)
      */
-    async getVideosByRequest(_type: String, _limit: number, _order: object): Promise<Video[]> {
+    async getVideosByRequest(_type: String, _limit: number, _order: object): Promise<Videos[]> {
         return await this.videoRepository.find({
-            select: ["vid_id", "name", "vip", "likes", "dislikes"],
+            select: ["vid_id","likes","dislikes","file","title","premium"],
             where: [{ "type": _type }],
             order: _order,
             take: _limit
@@ -41,9 +41,9 @@ export class VideosService {
      * @param _id the requested video id
      * @returns the video type yet uknown
      */
-    async getVideo(_id: number):Promise<Video[]> {
+    async getVideo(_id: number):Promise<Videos[]> {
         return await this.videoRepository.find({
-            select: ["vid_id", "name", "file", "vip"],
+            select: ["vid_id","file","premium"],
             where: [{ "vid_id": _id }]
         });
     }
@@ -52,14 +52,14 @@ export class VideosService {
      * inserts a video into database
      * @param video the video data
      */
-    async createVideo(video: Video) {
+    async createVideo(video: Videos) {
         this.videoRepository.save(video);
     }
 
     async searchVideo(_query:string):Promise<Object>{
         return await this.videoRepository.find({
-            select: ["vid_id", "name", "file", "vip"],
-            where: [{ "name": Like("%"+_query+"%")}]
+            select: ["vid_id", "title", "file", "premium"],
+            where: [{ "title": Like("%"+_query+"%")}]
         });
     }
 
@@ -68,7 +68,7 @@ export class VideosService {
      * @todo test that this not creates anohter sligthly custom entrie but overrides the old one
      * @param video the new video data
      */
-    async updateVideo(video: Video) {
+    async updateVideo(video: Videos) {
         this.videoRepository.save(video);
     }
 

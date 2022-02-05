@@ -1,12 +1,7 @@
 import { Controller, Get, Request, Post, Query, UploadedFile, UseInterceptors, Delete, Body, StreamableFile, Response } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { VideosService } from '../Service/videos.service';
-import { CryptoService } from '../../crypto/Service/crypto.service';
-import { Video } from '../Entity/video.entity';
-import { createReadStream, fstat } from 'node:fs';
-import path, { join } from 'path';
 import * as fs from 'node:fs';
-import { request } from 'node:http';
 
 
 @Controller('videos')
@@ -47,10 +42,8 @@ export class VideosController {
         //      - Uses headers
         //      - checks params
 
-        const video = JSON.parse(req.query['video']);
-
-        console.log(req.hostname);
-        let fetched = await this.service.getVideo(video.video);
+        console.log(req.query);
+        let fetched = await this.service.getVideo(JSON.parse(req.query['vidQuery'])['video']);
         console.log(fetched[0]['file'])
         //return video;
         return {file:"http://localhost:3000/public/" + fetched[0]['file'], name: fetched[0]['name'], likes: fetched[0]['likes'], dislikes: fetched[0]['dislikes'], id: fetched[0]['vid_id']};
@@ -79,6 +72,9 @@ export class VideosController {
         //      - checks params
         //console.log(req.headers);
         video.file = file.originalname; // fixes undefined file issue
+        video.click = 0;
+        video.likes = 0;
+        video.dislikes = 0;
         this.service.createVideo(video);
 
         // Replyies to the requester that the request was successfull

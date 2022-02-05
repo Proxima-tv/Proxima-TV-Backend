@@ -6,7 +6,6 @@ import { AppService } from './app.service';
 import { VideosController } from './videos/Controller/videos.controller';
 import { CryptoService } from './crypto/Service/crypto.service';
 import { VideosService } from './videos/Service/videos.service';
-import { Video } from './videos/Entity/video.entity';
 import { VideosModule } from './videos/module/videos.module';
 import { CommentsService } from './comments/service/comments.service';
 import { CommentsModule } from './comments/module/comments.module';
@@ -19,6 +18,7 @@ import { User } from './users/entity/user.entity';
 import { WatchhistoryService } from './watchhistory/service/watchhistory.service';
 import { WatchhistoryEntity } from './watchhistory/entities/watchhistory.entity';
 import { WatchhistoryModule } from './watchhistory/module/watchhistory.module';
+import { Videos } from './videos/entity/videos.entity';
 
 @Module({
   imports: [
@@ -29,7 +29,7 @@ import { WatchhistoryModule } from './watchhistory/module/watchhistory.module';
       username: 'root',
       password: '22999',
       database: 'proxima',
-      entities: [Video, Comments, User, WatchhistoryEntity],
+      entities: [Videos, Comments, User, WatchhistoryEntity],
       synchronize: true,
     }),
     VideosModule,

@@ -19,9 +19,6 @@ export class UserController {
         console.log(await uNameRes.valueOf.length);
 
         if(uNameRes.valueOf.length == 0 || emailRes.valueOf.length == 0 ) {
-            user['profile_likes'] = 0;
-            user['profile_pic'] = 'undefined';
-            user['profile_id'] = Math.floor(Math.random() * 999999999);
             this.service.createUser(user);
             return {success:true, code:200};
         } else {
@@ -31,20 +28,25 @@ export class UserController {
 
     @Get('login')
     async loginUser(@Request() req){
-        
+        console.log(req.query);
         // get password hash from request body
         // get password hash from database
         // return user data and success code when logged in and error when not
-        console.log(req.query);
+
+        
+
         const user = JSON.parse(req.query['user']);
-        console.log(user);
         if(await this.service.verifyPassword(user.email, user.password)) {
             let u = await this.service.getUser(user.email);
             console.log(u[0]['id']);
-            this.watch.getHistory(u[0]['id']);
-            return JSON.stringify({success:true, code:200});
+            //this.watch.getHistory(u[0]['id']);
+            return {success:true, payload: {
+                username: u[0]['username'],
+                email: u[0]['email'],
+                id: u[0]['id']
+            }};
         } else {
-            return JSON.stringify({success:false, code:"invalid_login"});
+            return {success:false, code:"invalid_login"};
         }
     }
 
