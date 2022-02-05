@@ -65,13 +65,15 @@ export class VideosController {
         console.log(video);
         console.log(file);
 
-        fs.rename(file.path, './uploads/'+ file.originalname, (err) => {if (err) throw err;});
+        let fileName = file.filename + ".mp4";
+
+        fs.rename(file.path, './uploads/'+ fileName, (err) => {if (err) throw err;});
 
         // TODO: Verify data against proper permissions
         //      - Uses headers
         //      - checks params
         //console.log(req.headers);
-        video.file = file.originalname; // fixes undefined file issue
+        video.file = fileName; // fixes undefined file issue
         video.click = 0;
         video.likes = 0;
         video.dislikes = 0;
