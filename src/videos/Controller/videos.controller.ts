@@ -39,6 +39,7 @@ export class VideosController {
         // TODO Pull data from database
 
         // TODO: Verify data against proper permissions
+        //      - fix crashes when wrong id is given
         //      - Uses headers
         //      - checks params
 

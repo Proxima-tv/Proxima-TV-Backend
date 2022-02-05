@@ -19,6 +19,13 @@ export class UserService {
         });
     }
 
+    getUserById(_id:number):object{
+        return this.userRepository.find({
+            select:["id", "email","name","profile_likes","profile_pic","username"],
+            where:[{"id":_id}]
+        });
+    }
+
     getUserbyName(_username:string):Object{
         return this.userRepository.find({
             select:["id", "email","name","profile_likes","profile_pic","username"],

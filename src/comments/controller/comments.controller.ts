@@ -1,23 +1,36 @@
 import { Controller, Get, Request, Post, Query, Body } from '@nestjs/common';
+import { UserService } from 'src/users/service/user.service';
 import { Comments } from '../Entity/comments.entity';
 import { CommentsService } from '../service/comments.service';
 
 @Controller('comments')
 export class CommentsController {
-    constructor(private service:CommentsService){}
+    constructor(
+        private service:CommentsService, 
+        private userService:UserService){}
     
     @Post('comment')
     async createComment(@Body() comment:Comments, @Request() req){
         console.log(comment);
         let date = new Date();
+        
+        comment = comment['body'];
         comment["commented_on"] = "" + date.getDate(); 
         this.service.createComment(comment);
-        return "worked";
+        return {success:true, code: 200};
     }
 
     @Get('comments')
     async getComments(@Query() query, @Request() req){
-        return this.service.getComments(req.video)
+        let comments = await this.service.getComments(JSON.parse(req.query['video'])['video'])
+        let r = [];
+
+        for(let i = 0; i<comments.length; i++) {
+            let u = await this.userService.getUserById(comments[i]['author']);
+            let object = {"author": u[0]['username'],"comment":comments[i]['comment']}
+            r.push(object);
+        }
+        return r;
     }
     @Get('comments/limit')
     async getCommentsByLimit(@Body() body, @Request() req){
