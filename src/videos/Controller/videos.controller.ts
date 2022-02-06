@@ -1,4 +1,4 @@
-import { Controller, Get, Request, Post, Query, UploadedFile, UseInterceptors, Delete, Body, StreamableFile, Response } from '@nestjs/common';
+import { Controller, Get, Request, Post, Query, UploadedFile, UseInterceptors, Delete, Body, StreamableFile, Response, Req } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { VideosService } from '../Service/videos.service';
 import * as fs from 'node:fs';
@@ -29,6 +29,12 @@ export class VideosController {
         //CryptoService.encrypt(JSON.stringify({type: "reply", videos: await this.service.getVideos()})); // returning = replying
     }
 
+    @Get('stats')
+    async fetchStats(@Request() req) {
+        console.log(JSON.parse(req.query['stats'])['video']);
+        return await this.service.getVideoStats(JSON.parse(req.query['stats'])['video']);
+    }
+
     @Get('search')
     async searchInDB(@Body() body){
         return this.service.searchVideo(body.query);
@@ -47,7 +53,13 @@ export class VideosController {
         let fetched = await this.service.getVideo(JSON.parse(req.query['vidQuery'])['video']);
         console.log(fetched[0]['file'])
         //return video;
-        return {file:"http://localhost:3000/public/" + fetched[0]['file'], name: fetched[0]['name'], likes: fetched[0]['likes'], dislikes: fetched[0]['dislikes'], id: fetched[0]['vid_id']};
+        return {
+            file:"http://localhost:3000/public/" + fetched[0]['file'], 
+            name: fetched[0]['name'], 
+            likes: fetched[0]['likes'], 
+            dislikes: fetched[0]['dislikes'], 
+            id: fetched[0]['vid_id']
+        };
     }
 
     /**

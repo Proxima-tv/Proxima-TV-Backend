@@ -1,5 +1,4 @@
 import { Body, Controller, Get, Post, Request } from '@nestjs/common';
-import { CryptoService } from 'src/crypto/Service/crypto.service';
 import { WatchhistoryService } from 'src/watchhistory/service/watchhistory.service';
 import { User } from '../entity/user.entity';
 import { UserService } from '../service/user.service';
@@ -32,8 +31,6 @@ export class UserController {
         // get password hash from request body
         // get password hash from database
         // return user data and success code when logged in and error when not
-
-        
 
         const user = JSON.parse(req.query['user']);
         if(await this.service.verifyPassword(user.email, user.password)) {

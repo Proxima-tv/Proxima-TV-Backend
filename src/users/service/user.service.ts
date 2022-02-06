@@ -8,37 +8,55 @@ export class UserService {
     constructor(@InjectRepository(User)
     private userRepository: Repository<User>){}
 
-    async createUser(user:User){
-        await this.userRepository.save(user);
+    async createUser(user:User): Promise<boolean>{
+        try {
+            await this.userRepository.save(user);
+            return true;
+        } catch (error) {
+            console.log(error);
+            return false;
+        }
     }
 
-    getUser(_email:string):object{
+    getUser(_email:string):Object | null{
         return this.userRepository.find({
             select:["id", "email","name","profile_likes","profile_pic","username"],
             where:[{"email":_email}]
         });
     }
 
-    getUserById(_id:number):object{
+    getUserById(_id:number):Object | null{
         return this.userRepository.find({
             select:["id", "email","name","profile_likes","profile_pic","username"],
             where:[{"id":_id}]
         });
     }
 
-    getUserbyName(_username:string):Object{
+    getUserbyName(_username:string):Object | null{
         return this.userRepository.find({
             select:["id", "email","name","profile_likes","profile_pic","username"],
             where:[{"username":_username}]
         }); 
     }
 
-    async updateUser(user:User){
-        this.userRepository.save(user);
+    async updateUser(user:User): Promise<Boolean>{
+        try {
+            this.userRepository.update(user.id, user);
+            return true;
+        } catch (error) {
+            console.log(error);
+            return false;
+        }
     }
 
-    async deleteUser(user:User){
-        this.userRepository.delete(user);
+    async deleteUser(user:User): Promise<boolean>{
+        try {
+            this.userRepository.delete(user);
+            return true;
+        } catch (error) {
+            console.log(error);
+            return false;
+        }
     }
 
     async verifyPassword(_email:string, _password):Promise<boolean> {
