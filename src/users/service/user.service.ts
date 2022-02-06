@@ -33,6 +33,15 @@ export class UserService {
         }); 
     }
 
+    getSettings(_email:string):object{
+        return this.userRepository.find({
+            select:["id", "email","name","profile_bio","profile_pic","username","passwort"],
+            where:[{"email":_email}]
+        
+
+        })
+    }
+   
     async updateUser(user:User){
         this.userRepository.save(user);
     }

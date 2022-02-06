@@ -25,4 +25,30 @@ export class User {
     
     @Column()
     profile_id: number;
+
+    @Column()
+    profile_bio: string ; 
+
+    @Column()
+    profile_public: number;
+
+    @Column()
+    public_stats: number;
+   
+    @Column()
+    public_watchhistory: number;
+
+    @Column()
+    sub_newsletter: number;
+   
+
+
+   
+
+
+    
+
+
+
+
 }
