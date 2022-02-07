@@ -29,6 +29,11 @@ export class VideosController {
         //CryptoService.encrypt(JSON.stringify({type: "reply", videos: await this.service.getVideos()})); // returning = replying
     }
 
+    @Get('recommends')
+    async getRecommendation(@Request() req) {
+        return await this.service.getVideosByRequest("nothing",4,{vid_id:"DESC"});
+    }
+
     @Get('stats')
     async fetchStats(@Request() req) {
         console.log(JSON.parse(req.query['stats'])['video']);
