@@ -5,24 +5,24 @@ export class User {
     @PrimaryGeneratedColumn()
     id:number;
     
-    @Column()
+    @Column({nullable:false})
     username: string;
     
-    @Column()
+    @Column({nullable:false})
     password: string;
 
     @Column({nullable:true})
     name: string;
 
-    @Column()
+    @Column({nullable:false, unique: true})
     email: string;
 
-    @Column()
+    @Column({nullable: false, default: 0})
     profile_likes: number;
 
-    @Column()
+    @Column({nullable:true, default: null})
     profile_pic: string;
     
-    @Column()
+    @Column({nullable:false})
     profile_id: number;
 }

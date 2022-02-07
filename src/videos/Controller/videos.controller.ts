@@ -99,17 +99,18 @@ export class VideosController {
     /**
      * updloads files
      * @param file the file
-     * @param query query gotten from request
      * @returns reply object
      */
     @Delete('video')
-    async deleteVideo(@Query() query, @Request() req){
+    async deleteVideo(@Request() req){
 
         // TODO: Verify data against proper permissions
         //      - Uses headers
         //      - checks params
-        console.log(query);
+        console.log(req.query);
         console.log(req.headers);
+
+        this.service.deleteVideo(req.query.id);
 
         // Replyies to the requester that the request was successfull
         return {type: "reply", code: "succes"};

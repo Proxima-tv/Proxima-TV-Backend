@@ -11,13 +11,20 @@ export class CommentsController {
     
     @Post('comment')
     async createComment(@Body() comment:Comments, @Request() req){
-        console.log(comment);
-        let date = new Date();
-        
-        comment = comment['body'];
-        comment["commented_on"] = "" + date.getDate(); 
-        this.service.createComment(comment);
-        return {success:true, code: 200};
+        try {
+            console.log(comment);
+            let date = new Date();
+            
+            if(comment["author"] == null) return {success:false, error: "no_author_given"};
+
+            comment = comment['body'];
+            comment["commented_on"] = "" + date.getDate(); 
+            this.service.createComment(comment);
+            return {success:true, code: 200};
+        } catch (error) {
+            console.log(error);
+            return {success:false, code:"not_commented"}
+        }
     }
 
     @Get('comments')

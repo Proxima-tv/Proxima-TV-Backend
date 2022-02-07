@@ -49,6 +49,6 @@ export class UserController {
 
     @Post('update')
     async updateUser(@Body() user:User){
-        this.service.updateUser(user);
+        //this.service.updateUser();
     }
 }

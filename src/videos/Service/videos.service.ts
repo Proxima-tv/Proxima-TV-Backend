@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Connection, Like, Repository } from 'typeorm';
+import * as fs from 'fs';
+import { Like, Repository } from 'typeorm';
 import { Videos } from '../entity/videos.entity';
 
 @Injectable()
@@ -65,11 +66,26 @@ export class VideosService {
      * @returns JSON or null for a video when found or not
      */
     async getVideoStats(_id:number): Promise<object> | null {
+
         try {
-            return await this.videoRepository.find({
+            // gets latest state of the wanted video
+            let video = await this.videoRepository.find({
                 select: ["title", "click", "likes", "dislikes", "uploaded_on"],
                 where: [{ "vid_id": _id }]
             });
+
+            // specifies array position 
+            let fetch = video[0];
+
+            // Updates the click value as value
+            fetch['click'] = video[0]["click"] += 1;
+
+            // updates the database 
+            if(await this.updateVideo(_id, {click:fetch['click']})){
+                return video;
+            } else {
+                return null;
+            }
         } catch (error) {
             console.log(error);
             return null;
@@ -78,10 +94,10 @@ export class VideosService {
 
     /**
      * inserts a video into database
-     * @param video the video data
+     * @param _video the video data
      */
-    async createVideo(video: Videos) {
-        this.videoRepository.save(video);
+    async createVideo(_video: Videos) {
+        this.videoRepository.save(_video);
     }
 
     /**
@@ -97,19 +113,36 @@ export class VideosService {
     }
 
     /**
-     * updates video data
-     * @todo test that this not creates anohter sligthly custom entrie but overrides the old one
-     * @param video the new video data
+     * updates the database according to changes object
+     * @param _id video by id to update 
+     * @param changes the changes to make as json
+     * @returns true if working false if error
      */
-    async updateVideo(video: Videos) {
-        this.videoRepository.save(video);
+    async updateVideo(_id:number, _changes:object):Promise<boolean> {
+        try {
+            this.videoRepository.update(_id, _changes);
+            return true;
+        } catch (error) {
+            console.log(error);
+            return false;
+        }
     }
 
     /**
-     * deletes a specified video
-     * @param video the video to remove
+     * deletes video specified by id
+     * @param _id video to delete
+     * @returns true if removal was successfull false if errors occured
      */
-    async deleteVideo(_id: number) {
-        this.videoRepository.delete(_id);
+    async deleteVideo(_id: number):Promise<boolean> {
+        try {
+            let video = await this.getVideo(_id);
+            console.log(video[0]["file"]);
+            await fs.unlinkSync("./uploads/" + video[0]["file"]);
+            await this.videoRepository.delete(_id);
+            return true;
+        } catch (error) {
+            console.log(error);
+            return false;
+        }
     }
 }
