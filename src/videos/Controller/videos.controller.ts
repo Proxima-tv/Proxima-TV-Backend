@@ -1,10 +1,6 @@
-import { Controller, Get, Request, Post, Query, UploadedFile, UseInterceptors, Delete, Body, StreamableFile, Response } from '@nestjs/common';
+import { Controller, Get, Request, Post, Query, UploadedFile, UseInterceptors, Delete, Body, StreamableFile, Response, Req } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { VideosService } from '../Service/videos.service';
-import { CryptoService } from '../../crypto/Service/crypto.service';
-import { Video } from '../Entity/video.entity';
-import { createReadStream, fstat } from 'node:fs';
-import path, { join } from 'path';
 import * as fs from 'node:fs';
 
 
@@ -33,16 +29,23 @@ export class VideosController {
         //CryptoService.encrypt(JSON.stringify({type: "reply", videos: await this.service.getVideos()})); // returning = replying
     }
 
+    @Get('stats')
+    async fetchStats(@Request() req) {
+        console.log(JSON.parse(req.query['stats'])['video']);
+        return await this.service.getVideoStats(JSON.parse(req.query['stats'])['video']);
+    }
+
     @Get('search')
     async searchInDB(@Body() body){
         return this.service.searchVideo(body.query);
     }
 
     @Get('video')
-    async getVideo(@Body() body, @Response({passthrough:true}) res, @Request() req) {
+    async getVideo(@Response({passthrough:true}) res, @Request() req) {
         // TODO Pull data from database
 
         // TODO: Verify data against proper permissions
+        //      - fix crashes when wrong id is given
         //      - Uses headers
         //      - checks params
 
@@ -50,7 +53,13 @@ export class VideosController {
         let fetched = await this.service.getVideo(JSON.parse(req.query['vidQuery'])['video']);
         console.log(fetched[0]['file'])
         //return video;
-        return {file:"http://localhost:3000/public/" + fetched[0]['file'], name: fetched[0]['name'], likes: fetched[0]['likes'], dislikes: fetched[0]['dislikes'], id: fetched[0]['vid_id']};
+        return {
+            file:"http://localhost:3000/public/" + fetched[0]['file'], 
+            name: fetched[0]['name'], 
+            likes: fetched[0]['likes'], 
+            dislikes: fetched[0]['dislikes'], 
+            id: fetched[0]['vid_id']
+        };
     }
 
     /**
@@ -69,13 +78,18 @@ export class VideosController {
         console.log(video);
         console.log(file);
 
-        fs.rename(file.path, './uploads/'+ file.originalname, (err) => {if (err) throw err;});
+        let fileName = file.filename + ".mp4";
+
+        fs.rename(file.path, './uploads/'+ fileName, (err) => {if (err) throw err;});
 
         // TODO: Verify data against proper permissions
         //      - Uses headers
         //      - checks params
         //console.log(req.headers);
-        video.file = file.originalname; // fixes undefined file issue
+        video.file = fileName; // fixes undefined file issue
+        video.click = 0;
+        video.likes = 0;
+        video.dislikes = 0;
         this.service.createVideo(video);
 
         // Replyies to the requester that the request was successfull

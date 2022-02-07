@@ -14,6 +14,7 @@ export class CommentsService {
      * @param comments received data from comment
      */
     async createComment(comments:Comments){
+        console.log(comments)
         this.commentRepository.save(comments);
     }
 
@@ -27,7 +28,7 @@ export class CommentsService {
         // CURRENT ONGOIN ISSUE: NOT ALL DATA PRESENT
         return await this.commentRepository.find({
             select:["author", "comment"],
-            where: [{"video":_video}],
+            where: [{"vid_id":_video}],
         });
     }
 
