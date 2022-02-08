@@ -2,6 +2,7 @@ import { Controller, Get, Request, Post, Query, UploadedFile, UseInterceptors, D
 import { FileInterceptor } from '@nestjs/platform-express';
 import { VideosService } from '../Service/videos.service';
 import * as fs from 'node:fs';
+import { query } from 'express';
 
 
 @Controller('videos')
@@ -41,8 +42,10 @@ export class VideosController {
     }
 
     @Get('search')
-    async searchInDB(@Body() body){
-        return this.service.searchVideo(body.query);
+    async searchInDB(@Request() req){
+        console.log(req.query);
+        console.log(await this.service.searchVideo(JSON.parse(req.query["query"])["query"]));
+        return await this.service.searchVideo(JSON.parse(req.query["query"])["query"]);
     }
 
     @Get('video')

@@ -18,6 +18,7 @@ import { WatchhistoryService } from './watchhistory/service/watchhistory.service
 import { WatchhistoryEntity } from './watchhistory/entities/watchhistory.entity';
 import { WatchhistoryModule } from './watchhistory/module/watchhistory.module';
 import { Videos } from './videos/entity/videos.entity';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
@@ -26,7 +27,7 @@ import { Videos } from './videos/entity/videos.entity';
       host: 'localhost',
       port: 3306,
       username: 'root',
-      password: '22999',
+      password: '',
       database: 'proxima',
       entities: [Videos, Comments, User, WatchhistoryEntity],
       synchronize: true,

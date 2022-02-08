@@ -27,7 +27,12 @@ export class UserController {
     }
     @Get('settings')
         async getSettings(@Request() req){
+            
             console.log(req.query);
+            let json = req.query;
+            let user = JSON.parse(json["user"])["email"];
+            console.log(user);
+            return await this.service.getsettings(user);
         }
     @Get('login')
     async loginUser(@Request() req){

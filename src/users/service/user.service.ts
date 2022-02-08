@@ -35,10 +35,8 @@ export class UserService {
 
     async getsettings(_email:string):Promise<object>{
         return await this.userRepository.find({
-            select:["id", "email","name","profile_bio","profile_pic","username","password"],
+            select:["id", "email","name","profile_bio","profile_pic","username"],
             where:[{"email":_email}]
-        
-
         })
     }
    
