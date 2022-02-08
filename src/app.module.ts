@@ -27,7 +27,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       host: 'localhost',
       port: 3306,
       username: 'root',
-      password: '',
+      password: '22999',
       database: 'proxima',
       entities: [Videos, Comments, User, WatchhistoryEntity],
       synchronize: true,
