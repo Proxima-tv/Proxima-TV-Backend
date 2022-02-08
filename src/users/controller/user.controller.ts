@@ -25,7 +25,10 @@ export class UserController {
             return {success:false, code:"duplicating_user_or_email"};
         }
     }
-
+    @Get('settings')
+        async getSettings(@Request() req){
+            console.log(req.query);
+        }
     @Get('login')
     async loginUser(@Request() req){
         console.log(req.query);

@@ -12,30 +12,30 @@ export class UserService {
         await this.userRepository.save(user);
     }
 
-    getUser(_email:string):object{
-        return this.userRepository.find({
+    async getUser(_email:string):Promise<object>{
+        return await this.userRepository.find({
             select:["id", "email","name","profile_likes","profile_pic","username"],
             where:[{"email":_email}]
         });
     }
 
-    getUserById(_id:number):object{
-        return this.userRepository.find({
+    async getUserById(_id:number):Promise<object>{
+        return await this.userRepository.find({
             select:["id", "email","name","profile_likes","profile_pic","username"],
             where:[{"id":_id}]
         });
     }
 
-    getUserbyName(_username:string):Object{
-        return this.userRepository.find({
+    async getUserbyName(_username:string):Promise<Object>{
+        return await this.userRepository.find({
             select:["id", "email","name","profile_likes","profile_pic","username"],
             where:[{"username":_username}]
         }); 
     }
 
-    getSettings(_email:string):object{
-        return this.userRepository.find({
-            select:["id", "email","name","profile_bio","profile_pic","username","passwort"],
+    async getsettings(_email:string):Promise<object>{
+        return await this.userRepository.find({
+            select:["id", "email","name","profile_bio","profile_pic","username","password"],
             where:[{"email":_email}]
         
 

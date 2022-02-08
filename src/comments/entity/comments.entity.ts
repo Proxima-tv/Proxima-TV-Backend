@@ -5,10 +5,10 @@ export class Comments {
     @PrimaryGeneratedColumn()
     com_id: number;
 
-    @Column()
+    @Column({nullable:false})
     author: number;
 
-    @Column()
+    @Column({nullable:false})
     comment: string;
 
     @Column({default: 0})
@@ -17,9 +17,9 @@ export class Comments {
     @Column({default:0})
     profile_id:number;
 
-    @Column()
+    @Column({nullable:false})
     vid_id: number;
 
-    @Column()
+    @Column({default: Date.now().toLocaleString()})
     commented_on: string;
 }
