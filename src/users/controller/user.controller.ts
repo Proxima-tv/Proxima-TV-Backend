@@ -1,4 +1,6 @@
 import { Body, Controller, Get, Post, Request } from '@nestjs/common';
+import { request } from 'http';
+import { RoutAuthenticatorService } from 'src/rout-authenticator/rout-authenticator.service';
 import { WatchhistoryService } from 'src/watchhistory/service/watchhistory.service';
 import { User } from '../entity/user.entity';
 import { UserService } from '../service/user.service';
@@ -7,7 +9,8 @@ import { UserService } from '../service/user.service';
 export class UserController {
     constructor(
         private service:UserService,
-        private watch:WatchhistoryService    
+        private watch:WatchhistoryService,
+        private routeAuth: RoutAuthenticatorService  
     ){}
     @Post('register')
     async registerUser(@Body() user){
@@ -32,6 +35,7 @@ export class UserController {
         // get password hash from database
         // return user data and success code when logged in and error when not
 
+        return this.routeAuth.checkHeader(req.headers);
         const user = JSON.parse(req.query['user']);
         if(await this.service.verifyPassword(user.email, user.password)) {
             let u = await this.service.getUser(user.email);

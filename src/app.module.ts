@@ -19,6 +19,7 @@ import { WatchhistoryService } from './watchhistory/service/watchhistory.service
 import { WatchhistoryEntity } from './watchhistory/entities/watchhistory.entity';
 import { WatchhistoryModule } from './watchhistory/module/watchhistory.module';
 import { Videos } from './videos/entity/videos.entity';
+import { RoutAuthenticatorService } from './rout-authenticator/rout-authenticator.service';
 
 @Module({
   imports: [
@@ -38,6 +39,6 @@ import { Videos } from './videos/entity/videos.entity';
     WatchhistoryModule
   ],
   controllers: [AppController, VideosController, CommentsController, UserController],
-  providers: [AppService, CryptoService, VideosService, CommentsService, UserService, WatchhistoryService],
+  providers: [AppService, CryptoService, VideosService, CommentsService, UserService, WatchhistoryService, RoutAuthenticatorService],
 })
 export class AppModule {}
