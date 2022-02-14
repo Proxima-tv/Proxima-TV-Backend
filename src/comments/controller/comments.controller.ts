@@ -15,11 +15,12 @@ export class CommentsController {
             console.log(comment);
             let date = new Date();
             
-            if(comment["author"] == null) return {success:false, error: "no_author_given"};
-
             comment = comment['body'];
             comment["commented_on"] = "" + date.getDate(); 
-            this.service.createComment(comment);
+            
+            if(comment["author"] == null) return {success:false, error: "no_author_given"};
+            
+            await this.service.createComment(comment);
             return {success:true, code: 200};
         } catch (error) {
             console.log(error);

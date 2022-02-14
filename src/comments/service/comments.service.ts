@@ -1,21 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Connection, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Comments } from '../Entity/comments.entity';
 
 @Injectable()
 export class CommentsService {
     constructor(@InjectRepository(Comments)
-    private commentRepository:Repository<Comments>,
-    private connection: Connection){}
+    private commentRepository:Repository<Comments>){}
 
     /**
      * creates comment from given data
      * @param comments received data from comment
      */
     async createComment(comments:Comments){
-        console.log(comments)
-        this.commentRepository.save(comments);
+        console.log("comments creation call");
+        try {
+            this.commentRepository.save(comments);
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     /**

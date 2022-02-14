@@ -25,4 +25,30 @@ export class User {
     
     @Column({nullable:false})
     profile_id: number;
+
+    @Column({nullable:true})
+    profile_bio: string ; 
+
+    @Column({default: false})
+    profile_public: boolean;
+
+    @Column({default: false})
+    public_stats: boolean;
+   
+    @Column({default: false})
+    public_watchhistory: boolean;
+
+    @Column({default: false})
+    sub_newsletter: boolean;
+   
+
+
+   
+
+
+    
+
+
+
+
 }
