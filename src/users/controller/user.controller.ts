@@ -1,10 +1,6 @@
 import { Body, Controller, Get, Post, Request } from '@nestjs/common';
-<<<<<<< HEAD
-import { request } from 'http';
-import { RoutAuthenticatorService } from 'src/rout-authenticator/rout-authenticator.service';
-=======
 import { CryptoService } from 'src/crypto/Service/crypto.service';
->>>>>>> 6ae145fd541bbcc986e4f127e5e609aab8df560c
+import { RoutAuthenticatorService } from 'src/rout-authenticator/rout-authenticator.service';
 import { WatchhistoryService } from 'src/watchhistory/service/watchhistory.service';
 import { User } from '../entity/user.entity';
 import { UserService } from '../service/user.service';
@@ -47,12 +43,7 @@ export class UserController {
         // get password hash from database
         // return user data and success code when logged in and error when not
 
-<<<<<<< HEAD
         return this.routeAuth.checkHeader(req.headers);
-=======
-        
-
->>>>>>> 6ae145fd541bbcc986e4f127e5e609aab8df560c
         const user = JSON.parse(req.query['user']);
         if(await this.service.verifyPassword(user.email, user.password)) {
             let u = await this.service.getUser(user.email);

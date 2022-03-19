@@ -18,11 +18,8 @@ import { WatchhistoryService } from './watchhistory/service/watchhistory.service
 import { WatchhistoryEntity } from './watchhistory/entities/watchhistory.entity';
 import { WatchhistoryModule } from './watchhistory/module/watchhistory.module';
 import { Videos } from './videos/entity/videos.entity';
-<<<<<<< HEAD
 import { RoutAuthenticatorService } from './rout-authenticator/rout-authenticator.service';
-=======
 import { TypeOrmModule } from '@nestjs/typeorm';
->>>>>>> 6ae145fd541bbcc986e4f127e5e609aab8df560c
 
 @Module({
   imports: [
