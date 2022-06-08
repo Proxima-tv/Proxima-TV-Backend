@@ -39,7 +39,7 @@ export class UserService {
             where:[{"email":_email}]
         })
     }
-   
+
     async updateUser(user:User){
         this.userRepository.save(user);
     }

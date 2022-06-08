@@ -19,6 +19,7 @@ export class UserController {
         console.log(await uNameRes.valueOf.length);
 
         if(uNameRes.valueOf.length == 0 || emailRes.valueOf.length == 0 ) {
+            user["profile_id"] = Math.floor(Math.random() * 99999);
             this.service.createUser(user);
             return {success:true, code:200};
         } else {
@@ -40,8 +41,6 @@ export class UserController {
         // get password hash from request body
         // get password hash from database
         // return user data and success code when logged in and error when not
-
-        
 
         const user = JSON.parse(req.query['user']);
         if(await this.service.verifyPassword(user.email, user.password)) {

@@ -44,7 +44,7 @@ export class CommentsService {
     async getCommentsLimited(_limit:number, _video:number){
         return await this.commentRepository.find({
             select:["author", "comment"],
-            where: [{"video":_video}],
+            where: [{"vid_id":_video}],
             take: _limit
         })
     }
