@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Post, Request } from '@nestjs/common';
 import { CryptoService } from 'src/crypto/Service/crypto.service';
+import { RoutAuthenticatorService } from 'src/rout-authenticator/rout-authenticator.service';
 import { WatchhistoryService } from 'src/watchhistory/service/watchhistory.service';
 import { User } from '../entity/user.entity';
 import { UserService } from '../service/user.service';
@@ -8,7 +9,8 @@ import { UserService } from '../service/user.service';
 export class UserController {
     constructor(
         private service:UserService,
-        private watch:WatchhistoryService    
+        private watch:WatchhistoryService,
+        private routeAuth: RoutAuthenticatorService  
     ){}
     @Post('register')
     async registerUser(@Body() user){
@@ -31,6 +33,9 @@ export class UserController {
             
             console.log(req.query);
             let json = req.query;
+
+            console.log(json);
+
             let user = JSON.parse(json["user"])["email"];
             console.log(user);
             return await this.service.getsettings(user);
@@ -43,7 +48,8 @@ export class UserController {
         // return user data and success code when logged in and error when not
 
         const user = JSON.parse(req.query['user']);
-        if(await this.service.verifyPassword(user.email, user.password)) {
+        console.log(user);
+        if(await this.service.verifyPassword(user.email, decodeURIComponent(user.password))) {
             let u = await this.service.getUser(user.email);
             console.log(u[0]['id']);
             //this.watch.getHistory(u[0]['id']);

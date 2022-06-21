@@ -1,14 +1,16 @@
-import { Controller, Get, Request, Post, Query, UploadedFile, UseInterceptors, Delete, Body, StreamableFile, Response, Req } from '@nestjs/common';
+import { Controller, Get, Request, Post, Query, UploadedFile, UseInterceptors, Delete, Body, StreamableFile, Response, Req, Param, Res } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { VideosService } from '../Service/videos.service';
 import * as fs from 'node:fs';
 import { query } from 'express';
+import { constants } from 'node:buffer';
 
 
 @Controller('videos')
 export class VideosController {
     constructor(
         private service: VideosService) {}
+
     @Get('videos')
     async getVideos(@Query() query, @Request() req) {
         // TODO Pull data from database
@@ -48,8 +50,8 @@ export class VideosController {
         return await this.service.searchVideo(JSON.parse(req.query["query"])["query"]);
     }
 
-    @Get('video')
-    async getVideo(@Response({passthrough:true}) res, @Request() req) {
+    @Get('video/:id')
+    async getVideo(@Res() res, @Request() req, @Param('id') id) {
         // TODO Pull data from database
 
         // TODO: Verify data against proper permissions
@@ -57,17 +59,36 @@ export class VideosController {
         //      - Uses headers
         //      - checks params
 
-        console.log(req.query);
-        let fetched = await this.service.getVideo(JSON.parse(req.query['vidQuery'])['video']);
-        console.log(fetched[0]['file'])
-        //return video;
-        return {
-            file:"http://localhost:3000/public/" + fetched[0]['file'], 
-            name: fetched[0]['name'], 
-            likes: fetched[0]['likes'], 
-            dislikes: fetched[0]['dislikes'], 
-            id: fetched[0]['vid_id']
-        };
+        try {   
+            const range = req.headers.range;
+            console.log(range);
+            if (!range) {
+                res.status(400).send("Requires Range header");
+            }
+
+            let fetched = await this.service.getVideo(JSON.parse(id));
+
+            const videoPath = "./uploads/" + fetched[0]['file'];
+            const videoSize = fs.statSync(videoPath).size;
+            const CHUNK_SIZE = 10 ** 6; // 1MB
+            const start = Number(range.replace(/\D/g, ""));
+            console.log(start);
+            const end = Math.min(start + CHUNK_SIZE, videoSize - 1);
+            const contentLength = end - start + 1;
+            
+            const responseHeader = {
+                "Content-Range": `bytes ${start}-${end}/${videoSize}`,
+                "Accept-Ranges": "bytes",
+                "Content-Length": contentLength,
+                "Content-Type": "video/mp4",
+            };
+
+            res.writeHead(206, responseHeader);
+            const videoStream = fs.createReadStream(videoPath, { start, end });
+            videoStream.pipe(res);
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     /**

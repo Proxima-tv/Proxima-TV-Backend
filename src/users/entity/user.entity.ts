@@ -40,15 +40,4 @@ export class User {
 
     @Column({default: false})
     sub_newsletter: boolean;
-   
-
-
-   
-
-
-    
-
-
-
-
 }

@@ -18,6 +18,7 @@ import { WatchhistoryService } from './watchhistory/service/watchhistory.service
 import { WatchhistoryEntity } from './watchhistory/entities/watchhistory.entity';
 import { WatchhistoryModule } from './watchhistory/module/watchhistory.module';
 import { Videos } from './videos/entity/videos.entity';
+import { RoutAuthenticatorService } from './rout-authenticator/rout-authenticator.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
@@ -27,7 +28,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       host: 'localhost',
       port: 3306,
       username: 'root',
-      password: '22999',
+      password: '',
       database: 'proxima',
       entities: [Videos, Comments, User, WatchhistoryEntity],
       synchronize: true,
@@ -38,6 +39,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     WatchhistoryModule
   ],
   controllers: [AppController, VideosController, CommentsController, UserController],
-  providers: [AppService, CryptoService, VideosService, CommentsService, UserService, WatchhistoryService],
+  providers: [AppService, CryptoService, VideosService, CommentsService, UserService, WatchhistoryService, RoutAuthenticatorService],
 })
 export class AppModule {}

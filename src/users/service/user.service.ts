@@ -48,14 +48,15 @@ export class UserService {
         this.userRepository.delete(user);
     }
 
-    async verifyPassword(_email:string, _password):Promise<boolean> {
+    async verifyPassword(_email:string, _password:string):Promise<boolean> {
         console.log("email: " + _email);
-        console.log(_password);
+        console.log("password: " + _password);
         const password = await this.userRepository.find({
             select:["password"],
             where:[{"email":_email}]
         });
 
+        console.log(password[0]['password']);
         console.log(password[0]['password'] == _password);
 
         return password[0]['password'] == _password;
